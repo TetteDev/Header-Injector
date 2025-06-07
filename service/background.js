@@ -235,55 +235,6 @@ function onBeforeSendHeaders(details) {
 	return { requestHeaders: details.requestHeaders }; 
 }
 
-function _onBeforeSendHeaders(details) {
-	const rulesLength = cachedRules.length;
-	for (let i = 0; i < rulesLength; i++) {
-		const rule = cachedRules[i];
-		const matchesDomain = rule.domains.some(domain => domain.test(details.url));
-		if (matchesDomain) {
-			const headersLength = rule.headers.length;
-			for (let j = 0; j < headersLength; j++) {
-				const header = rule.headers[j];
-				const headerIndex = details.requestHeaders.findIndex(h => h.name.toLowerCase() === header.name);
-				const headerPresentInRequest = headerIndex > -1;
-
-				if (headerPresentInRequest) {
-					if (!header.value) {
-						// If the header value is empty but header.name exists
-						// remove the header completely from the main request headers
-						details.requestHeaders.splice(headerIndex, 1);
-					}
-					else {
-						// Update the existing header value in our main request headers with our own header value
-						details.requestHeaders[headerIndex].value = header.value;
-					}
-				}
-				else {
-					if (!header.value) {
-						// header.name was not present in the main request headers
-						// and header.value was nothing
-						// so we do NOT add it to the request headers
-					}
-					else {
-						// header.name was not present in the main request headers
-						// but header.value was something
-						// so we force add it to the request headers
-						details.requestHeaders.push({ name: header.name, value: header.value });
-					}
-				}
-			}
-		}
-	}
-
-	// Check the request headers AFTER we have done our modifications (if any)
-	
-	if (details.initiator?.includes('chrome-extension://')) {
-		requestHeaderInspector(details.requestHeaders);
-    }
-
-	return { requestHeaders: details.requestHeaders }; 
-}
-
 _browser.storage.onChanged.addListener((changes, namespace) => {
 	if (namespace === 'local' && changes.rules) {
 		initListeners();
