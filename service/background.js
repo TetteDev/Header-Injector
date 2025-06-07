@@ -119,7 +119,6 @@ function requestHeaderInspector(headers) {
 	alert(formattedHeadersString);
 }
 
-
 const _ENABLE_DOMAIN_RULES_CACHE = true; // if true, we cache the rules for each domain to avoid unnecessary RegExp .test calls
 const cachedDomainRulesPair = new Map(); // cache for domain rules to avoid unnecessary RegExp .test calls
 
