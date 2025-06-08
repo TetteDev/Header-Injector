@@ -10,9 +10,6 @@
 # uncomment the following lines to allow the
 # build scripts to be included in the repository.
 
-# Allow build scripts to be included in the repository
-# even though they have the .bat extension which is 
-# specified above to be ignored.
 # !PACK_FIREFOX.bat
 # !PACK_CHROME.bat
 # !BUILDSCRIPT_PACK_CHROME.bat
